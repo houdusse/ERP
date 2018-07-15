@@ -4,3 +4,9 @@ CREATE TABLE IF NOT EXISTS Modules (
 	PRIMARY KEY(id)
 )
 ;
+
+INSERT INTO Modules (nom) VALUES
+('Gestion Commerciale'),
+('Comptatbilite'),
+('Depots')
+;

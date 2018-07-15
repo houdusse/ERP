@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Articles (
 	PRIMARY KEY(id),
 	FOREIGN KEY(idDepartemet) REFERENCES Departements(id),
 	FOREIGN KEY(idFamille) REFERENCES Familles(id),
-	FOREIGN KEY(idSousFamille) REFERENCES SousFamilles(id),
+	FOREIGN KEY(idSousFamille) REFERENCES SousFamilles(id)
 );
 
 INSERT INTO Articles (code, libelle) VALUES

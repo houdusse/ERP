@@ -1,7 +1,7 @@
-CREATE TABLE IF NOT EXIST DepartmentsProduits (
+CREATE TABLE IF NOT EXISTS DepartementsProduits (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	libelle VARCHAR(60) NOT NULL,
-	PRIMARY KEY(id),
 	UNIQUE(libelle),
+	PRIMARY KEY(id)
 )
 ;

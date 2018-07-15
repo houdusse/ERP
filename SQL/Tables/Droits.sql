@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Droits (
 	idUtilisateur INT UNSIGNED,
 	idGroupe INT UNSIGNED,
 	PRIMARY KEY(id),
-	FOREIGN KEY idUtilisateur REFERENCES Utilisateurs(id),
-	FOREIGN KEY idGroupe REFERENCES Groupes(id)
+	FOREIGN KEY(idUtilisateur) REFERENCES Utilisateurs(id),
+	FOREIGN KEY(idGroupe) REFERENCES Groupes(id)
 )
 ;

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS HistoMouvementsStocks (
 	destination VARCHAR(10),
 	heuroDatage DATETIME,
 	utilisateur INT UNSIGNED,
-	quantité DECIMAL(8,3),
+	quantite DECIMAL(8,3),
 	justificatif VARCHAR(100),
 	PRIMARY KEY(id)
 );
