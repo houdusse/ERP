@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS Droits (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	niveau DECIMAL(2,0),
+	idUtilisateur INT UNSIGNED,
+	idGroupe INT UNSIGNED,
+	PRIMARY KEY(id),
+	FOREIGN KEY idUtilisateur REFERENCES Utilisateurs(id),
+	FOREIGN KEY idGroupe REFERENCES Groupes(id)
+)
+;
