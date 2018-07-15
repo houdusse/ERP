@@ -49,5 +49,7 @@ SOURCE  C:/wamp64/www/ERP/SQL/Tables/MoyensContactsFournisseurs.sql;
 select 'Table MoyensContactsFournisseurs OK';
 SOURCE  C:/wamp64/www/ERP/SQL/Tables/HistoMouvementsStocks.sql;
 select 'Table HistoMouvementsStocks OK';
+SOURCE  C:/wamp64/www/ERP/SQL/Tables/MoyensPaiements.sql;
+select 'Table MoyensPaiements OK';
 SHOW TABLES;
 select '--- Fin du script ---';
