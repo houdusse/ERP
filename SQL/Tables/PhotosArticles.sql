@@ -1,0 +1,9 @@
+CREATE TABLES IF NOT EXISTS PhotosArticles (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	chemin VARCHAR(100),
+	rang INT UNSIGNED,
+	idArticle INT UNSIGNED,
+	UNIQUE(idArticle, rang),
+	PRIMARY KEY(id),
+	FOREIGN KEY(idArticle) REFERENCES Articles(id),
+)
