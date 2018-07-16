@@ -30,22 +30,21 @@ abstract class Utilitaires {
 		return $chaine;
 	}
 
-	// methode generique lançant une requête SQL sur la base et renvoyant soit un objet soit
-	// un tableau d'objets soit un tableau indexé
+	// methode generique lançant une requête SQL sur la base et renvoyant
+	// soit un tableau d'objets soit un tableau indexé
 	public static function ADO($sql, array $parametres, $class, $DB) {
 		try {
 			$tableau = null;
 			$statement = $DB->prepare($sql);
-
 			// Si le retour doit se faire par objet $class n'est pas null et contient le nom de la classe à utiliser 
 			if ($class !== null) {
 				$retour = $statement->setFetchMode(PDO::FETCH_CLASS, $class);
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(PDO::FETCH_NUM);
 			}
-			$statement->execute($parametres);
+ 			$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
-			if (! preg_match('#(^SELECT|select)#', $statement->queryString)) {
+			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
 				while ($donnees = $statement->fetch()) {
 					$tableau[] = $donnees;
 				}

@@ -26,7 +26,7 @@ class UtilisateurManager {
 			$statement = $this->DB->prepare($sql);
 			$statement->bindValue(':login', $login);
 			$statement->execute();
-			$result = $statement->fetch(PDO::FETCH_ASSOC);
+			$result = $statement->fetch(\PDO::FETCH_ASSOC);
 		} catch (Exception $e) {
 			die($e->getMessage());
 		}
@@ -36,21 +36,13 @@ class UtilisateurManager {
 		return true;
 	}
 
-	public function getUtilisateur($critere) {
-			$bidon = new shoudusse\ERP\Utilisateur();
-		try {
+	public function getUser($critere) {
+			// $bidon = new shoudusse\ERP\Utilisateur();
+			$param = array(':critere' => $critere);
 			$sql = 'SELECT * FROM Utilisateurs WHERE login = :critere';
-			$statement = $this->DB->prepare($sql);
-			$statement->bindValue(':critere', $critere);
-			$statement->execute();
-			$statement->setFetchMode(PDO::FETCH_CLASS, 'shoudusse\ERP\Utilisateur');
-			$user = $statement->fetch();
-		} catch (Exception $e) {
-			echo 'Erreur getUtilisateur<br>';
-			die($e->getMessage());
-		}
-		var_dump($user);
-		return $user;
+			$tableau = Utilitaires::ADO($sql, $param, 'shoudusse\ERP\Utilisateur', $this->DB); //'shoudusse\ERP\Utilisateur'
+		var_dump($tableau);
+		return $tableau;
 	}
 
 }

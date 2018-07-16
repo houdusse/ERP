@@ -16,15 +16,15 @@ $user = 'shoudusse';
 $maconnexion =  Connexion::connect();
 $userADO = UtilisateurManager::initManager($maconnexion); 
 if ($userADO->existsUser($user)) {
-	$enregistrement = $userADO->getUser($user);
+	$shoudusse = $userADO->getUser($user);
 }
-$classe = 'shoudusse\ERP\Utilisateur';
+/*$classe = 'shoudusse\ERP\Utilisateur';
 shoudusse\ERP\Utilitaires::test($maconnexion, $classe);
 
 $sql = 'SELECT * FROM Utilisateurs WHERE login = :login';
 $critere = array(':login' => 'shoudusse');
 $enregistrement2 = Utilitaires::ADO($sql, $critere, 'shoudusse\ERP\Utilisateur', $maconnexion );
-var_dump($enregistrement2);
+var_dump($enregistrement2); */
 
 /*$sql = 'SELECT * FROM Utilisateurs where login = :login';
 $tab = array(':login' => 'shoudusse');
