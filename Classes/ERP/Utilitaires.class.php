@@ -32,7 +32,7 @@ abstract class Utilitaires {
 
 	// methode generique lançant une requête SQL sur la base et renvoyant
 	// soit un tableau d'objets soit un tableau indexé
-	public static function ADO($sql, array $parametres, $class, $DB) {
+	public static function ADO($sql, array $parametres, $class,$DB) {
 		try {
 			$tableau = null;
 			$statement = $DB->prepare($sql);
@@ -56,19 +56,26 @@ abstract class Utilitaires {
 		return $tableau; // soit tableau d'objet soit tableau indexé classique
 	}
 
-	public static function test($maconnexion, $laClasse) {
-		$sql = 'SELECT * FROM Utilisateurs where login = :login';
-		$tab = array(':login' => 'rdlb');
-		$state = $maconnexion->prepare($sql);
-		$state->setFetchMode(PDO::FETCH_CLASS, $laClasse);
-		$state->execute($tab);
-		$user = $state->fetch();
-		echo 'RRRRResultat';
-		var_dump($user);
-
+		// Methode qui renvoie un tableau associatif contenent tout les
+		public static function construireParametres($objet) {
+			$tableau = null;
+			$instrospection = new \ReflectionObject($objet);
+			foreach ($instrospection ->getProperties() as $attribut) {
+				$attribut->setAccessible(true);
+				$nomAttribut = $attribut->getName();
+				// On ne recherche que les attributs scalaire (non tableau et non objet)
+				$nomMethode = 'get'. ucfirst($nomAttribut); // nom du getter dans objet
+				$scalaire = true;
+				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
+					$scalaire = false;
+				}
+				if ( $scalaire) { 
+					$tableau[':' . $nomAttribut] = $attribut->getValue($objet);
+					$attribut->setAccessible(false);
+				}
+			}
+		return $tableau;
 	}
+
 }
-
-
-
 ?>
