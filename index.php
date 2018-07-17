@@ -23,7 +23,10 @@ if ($userADO->existsUser($user)) {
 	$resultat = $userADO->getUser($user);
 	$shoudusse = $resultat[0];
 }
-$tab = Utilitaires::construireParametres($shoudusse);
-var_dump($tab);
+
+$shoudusse->deleteUser($shoudusse);
+
+
+
 
 ?>

@@ -51,5 +51,7 @@ SOURCE  C:/wamp64/www/ERP/SQL/Tables/HistoMouvementsStocks.sql;
 select 'Table HistoMouvementsStocks OK';
 SOURCE  C:/wamp64/www/ERP/SQL/Tables/MoyensPaiements.sql;
 select 'Table MoyensPaiements OK';
+SOURCE  C:/wamp64/www/ERP/SQL/Tables/test.sql;
+select 'Table Test OK';
 SHOW TABLES;
 select '--- Fin du script ---';

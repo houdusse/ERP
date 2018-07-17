@@ -15,11 +15,12 @@ class Utilisateur {
 	// tableau des groupes auquel est rataché l'utilisateur
 	private $groupe = array();
 	// private $DB; 
-
+	private $dataAccess;
 
 	// Construteurs
-	public function __Construct( ) {
-		// $UtilisateurADO = UtilisateurManager::initManager($DB); // Singleton
+	public function __Construct($DB ) {
+		$this->dataAccess = UtilisateurManager::initManager($DB); // Singleton
+		echo 'constructeur Utilisateur';
 	} 
 
 
@@ -53,6 +54,10 @@ class Utilisateur {
 		return $this->groupe;
 	}
 
+	public function getDataAccess() {
+		return $this->dataAccess;
+	}
+
 	
 	// retourne un tableau associatif de toutes les propriétés de l'objet
 	public function listeAttributs() {
@@ -68,16 +73,16 @@ class Utilisateur {
 	}
 
 	public function setUser() {
-		if (existeUser('$this->login')) {
-			$UtilisateurADO->update($this);
+		if ($this->dataAccess->existsUser($this->login)) {
+			$this->dataAccess->update($this);
 		} else {
-			$UtilisateurADO->insert($this);
+			$this->dataAccess->insert($this);
 		}
 	}
 
 	public function deleteUser() {
-		if (existeUser('$this->login')) {
-			$UtilisateurADO->delete($this);
+		if ($this->dataAccess->existsUser($this->login)) {
+			$this->dataAccess->delete($this);
 		}
 	}
 

@@ -10,11 +10,12 @@ abstract  class DataManager {
 			$statement = $DB->prepare($sql);
 			// Si le retour doit se faire par objet $class n'est pas null et contient le nom de la classe à utiliser 
 			if ($class !== null) {
-				$retour = $statement->setFetchMode(\PDO::FETCH_CLASS, $class);
+				echo 'fetch_class';
+				$retour = $statement->setFetchMode(\PDO::FETCH_CLASS, $class, array($DB));
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(\PDO::FETCH_NUM);
 			}
- 			$statement->execute($parametres);
+ 				$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
 			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
 				while ($donnees = $statement->fetch()) {
@@ -50,6 +51,56 @@ abstract  class DataManager {
 		}
 		
 		return $tableau;
+	}
+
+	protected function constructionRequete($instruction, array $paramètres, $table) {
+		$chainesql = '';
+		switch ($instruction) {
+			case 'SELECT':
+				$chainesql .= $instruction .' (*) FROM ' . $table .' WHERE login = :login';  ;
+				break;
+
+			case 'INSERT': 
+				$chainesql .= $instruction .' INTO ' . $table .' (';
+				foreach ($paramètres as $key => $value) {
+					if ($key !== ':id') {
+						$chainesql .=  substr($key, 1) .', ';
+					}
+				}
+				// Suppression de la derniere ','
+				$chainesql = substr_replace($chainesql, ')', -1, -2);
+				$chainesql .= ' VALUES (';
+				foreach ($paramètres as $key => $value) {
+					if ($key !== ':id') {
+						$chainesql .=  $key .', ';
+						var_dump($chainesql);
+						echo '<br>';
+					}
+				}
+				// Suppression de la derniere ','
+				$chainesql = substr_replace($chainesql, ')', -1, -2);
+
+				break;
+			case 'DELETE':
+				$chainesql .= $instruction .' FROM ' .$table .' WHERE id = :id';
+
+				break;
+			case 'UPDATE':
+				$chainesql = $instruction . ' ' .$table .' SET ';
+				foreach ($paramètres as $key => $value) {
+					if ($key !== ':id') {
+						$chainesql .=  substr($key, 1) . ' = ' .$key .', ';
+					}
+				}
+				$chainesql = substr_replace($chainesql, ' ', -2, -1);
+				$chainesql .= ' WHERE id = :id';
+				break;
+			
+			default:
+				$chainesql = 'ERREUR INSTRUCTION ' .$instruction;
+				break;
+		}
+		return $chainesql;
 	}
 
 } 
