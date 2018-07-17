@@ -1,7 +1,7 @@
 <?php
 namespace shoudusse\ERP;
 
-class UtilisateurManager {
+class UtilisateurManager extends DataManager {
 
 	private static $instance = null;
 	private $DB; 
@@ -40,7 +40,7 @@ class UtilisateurManager {
 		// $bidon = new shoudusse\ERP\Utilisateur();
 		$param = array(':critere' => $critere);
 		$sql = 'SELECT * FROM Utilisateurs WHERE login = :critere';
-		$tableau = Utilitaires::ADO($sql, $param, 'shoudusse\ERP\Utilisateur', $this->DB);
+		$tableau = $this->ADO($sql, $param, 'shoudusse\ERP\Utilisateur', $this->DB);
 		var_dump($tableau);
 		return $tableau;
 	}
