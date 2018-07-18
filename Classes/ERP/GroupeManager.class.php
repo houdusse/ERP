@@ -3,6 +3,7 @@ namespace shoudusse\ERP;
 
 class GroupeManager extends DataManager {
 	private static $instance = null;
+	const TABLE_SQL = 'Groupes';
 
 	// Methode pour initalisation Singleton
 	public static function initManager() {
@@ -18,10 +19,9 @@ class GroupeManager extends DataManager {
 
 	// Teste l'existance d'un groupe par recherche sur le libelle
 	public function existsGroup(Groupe $group) {
-		$table = 'Groupes';
 		$className = Utilitaires::className($group);
 		$criteres = array(':libelle' => $group->getLibelle());
-		$selection = $this->recupId($table, $criteres, $className);
+		$selection = $this->recupId(self::TABLE_SQL, $criteres, $className);
 		if (count($selection) == 1) {
 			return true;
 		} else { 
@@ -34,9 +34,8 @@ class GroupeManager extends DataManager {
 	// Retourne un tableau d'object Groupe avec 1 objet trouve par le libelle
 	public function getGroup(Groupe $Group) {
 		$criteres  = array(':libelle' => $Group->getLibelle());
-		$table = 'Groupes';
 		$className = Utilitaires::className($Group);
-		$tableau = $this->recupId($table, $criteres, $className);
+		$tableau = $this->recupId(self::TABLE_SQL, $criteres, $className);
 		echo '----getGroup----';
 		var_dump($tableau);
 		return $tableau;
@@ -44,11 +43,10 @@ class GroupeManager extends DataManager {
 
 	// Supprime le Groupe de la base
 	public function deleteGroup(Groupe $group) {
-		$table = 'Groupes';
 		$instruction = 'DELETE';
 		$parametres = array(':id' => $group->getId());
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, $table);
+		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
 		echo '---DELETE----';
 		var_dump($chaineSql);
 
@@ -61,11 +59,10 @@ class GroupeManager extends DataManager {
 			$retour = $this->getGroup($group);
 			$group->setId($retour[0]->getId());
 		}
-		$table = 'Groupes';
 		$instruction = 'UPDATE';
 		$parametres = $this->construireParametres($group);
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, $table);
+		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
 		echo '---UPDATE----';
 		var_dump($chaineSql);
 		// $this->ADO($chaineSql, $parametres, $className);
@@ -73,11 +70,10 @@ class GroupeManager extends DataManager {
 
 	// Insere l'objet reçu en parametre dans la base
 	public function writeGroup(Groupe $group) {
-		$table = 'Groupes';
 		$instruction = 'INSERT';
 		$parametres = $this->construireParametres($group);
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, $table);
+		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
 		echo '---INSERT----';
 		var_dump($chaineSql);
 

@@ -60,7 +60,6 @@ abstract  class DataManager {
 		$chainesql = '';
 		switch ($instruction) {
 			case 'SELECT':
-				$chainesql .= $instruction .' (*) FROM ' . $table .' WHERE login = :login';  ;
 				break;
 
 			case 'INSERT': 

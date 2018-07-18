@@ -1,7 +1,7 @@
 <?php
 namespace shoudusse\ERP;
 use shoudusse\ERP\EtablissementManager;
-class Groupe  {
+class Etablissement  {
 
 	private $id;
 	private $code;
@@ -91,9 +91,9 @@ class Groupe  {
 
 	public function setEtablissement() {	
 		if ($this->ifExists()) {
-			$this->dataAccess->updateEtablissement($this);
+			$this->dataAccess->dataAccess($this, 'UPDATE');
 		} else {
-			$this->dataAccess->writeEtablissement($this);
+			$this->dataAccess->dataAccess($this, 'INSERT');
 		}
 	}
 
@@ -102,19 +102,8 @@ class Groupe  {
 	}
 
 	public function deleteEtablissement() {
-		$this->dataAccess->deleteEtablissement($this);
+		$this->dataAccess->dataAccess($this, 'DELETE');
 	}
 
-
-
-
-	
-
-
 }
-
-
-
-
-
 ?>

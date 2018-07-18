@@ -93,7 +93,7 @@ class Utilisateur {
 		return $this->dataAccess;
 	}
 	
-	// retourne un tableau associatif de toutes les propriétés de l'objet
+	/*// retourne un tableau associatif de toutes les propriétés de l'objet
 	public function listeAttributs() {
 		$tableau = array(
 			'id' => $this->getId(),
@@ -104,7 +104,7 @@ class Utilisateur {
 			'active' => $this->getActive(),
 		);
 		return $tableau;
-	}
+	}*/
 
 	public function setUser() {
 		$this->dataAccess->setUser($this);
@@ -119,10 +119,20 @@ class Utilisateur {
 
 	public function setUser() {	
 		if ($this->ifExists()) {
-			$this->dataAccess->updateGroup($this);
+			$this->dataAccess->updateUser($this);
 		} else {
-			$this->dataAccess->writeGroup($this);
+			$this->dataAccess->writeUser($this);
 		}
+	}
+
+	public function myGroups($this) {
+		$action = new UtilisateursGroupe();
+		$tableau  = $action->myGroups($this);
+		// Parcours du tableau pour recuperation des objets Groupe
+		foreach ($tableau as  $group) {
+		 	// recherche du groupe
+		 	$this->groupe[] =$group->getGroup();
+		 } 
 	}
 
 	public function autentification() {

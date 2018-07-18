@@ -5,7 +5,7 @@ class UtilisateurManager extends DataManager {
 
 	private static $instance = null;
 	private static $DB; 
-	private $table = 'Utilisateurs';
+	const TABLE_SQL = 'Utilisateurs';
 
 
 	public static function initManager() {
@@ -66,7 +66,7 @@ class UtilisateurManager extends DataManager {
 	public function getUser(Utilisateur $user) {
 		$criteres  = array(':login' => $Group->getLogin());
 		$className = Utilitaires::className($Group);
-		$tableau = $this->recupId($this->table, $criteres, $className);
+		$tableau = $this->recupId(self::TABLE_SQL, $criteres, $className);
 		echo '----getUtilisateur----';
 		var_dump($tableau);
 		return $tableau;
@@ -108,11 +108,10 @@ class UtilisateurManager extends DataManager {
 			$retour = $this->getUser($user);
 			$user->setId($retour[0]->getId());
 		}
-		$table = 'Utilisateurs';
 		$instruction = 'UPDATE';
 		$parametres = $this->construireParametres($user);
 		$className = Utilitaires::className($user);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, $table);
+		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
 		echo '---UPDATE----';
 		var_dump($chaineSql);
 		// $this->ADO($chaineSql, $parametres, $className);
@@ -120,22 +119,20 @@ class UtilisateurManager extends DataManager {
 
 	// Insere l'objet reçu en parametre dans la base
 	public function writeUser(Utilisateur $user) {
-		$table = 'Utilisateur';
 		$instruction = 'INSERT';
 		$parametres = $this->construireParametres($user);
 		$className = Utilitaires::className($user);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, $table);
+		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
 		echo '---INSERT----';
 		var_dump($chaineSql);
 	}
 
 	// Supprime le Groupe de la base
 	public function deleteUser(Utilisateur $user) {
-		$table = 'Utilisateurs';
 		$instruction = 'DELETE';
 		$parametres = array(':id' => $user->getId());
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, $table);
+		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
 		echo '---DELETE----';
 		var_dump($chaineSql);
 
