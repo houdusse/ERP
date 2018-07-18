@@ -30,7 +30,7 @@ abstract  class DataManager {
 	}
 
 
-	// Methode qui renvoie un tableau associatif contenent tout les
+	// Methode qui renvoie un tableau associatif contenent tout les parametres
 	protected function construireParametres($objet) {
 		$tableau = null;
 		$instrospection = new \ReflectionObject($objet);
@@ -92,6 +92,7 @@ abstract  class DataManager {
 						$chainesql .=  substr($key, 1) . ' = ' .$key .', ';
 					}
 				}
+				// Suppression de  la derniere ','
 				$chainesql = substr_replace($chainesql, ' ', -2, -1);
 				$chainesql .= ' WHERE id = :id';
 				break;

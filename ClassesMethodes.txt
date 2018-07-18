@@ -1,0 +1,5 @@
+
+
+programme		Classe UtilisateurManager
+			-> 	bool UtilisateurManager::existsUser()
+			-> 	array Object|array String UtilisateurManager::getUser 			

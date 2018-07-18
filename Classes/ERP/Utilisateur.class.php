@@ -58,6 +58,34 @@ class Utilisateur {
 		return $this->dataAccess;
 	}
 
+	// les Seters
+	public function setLogin($login) {
+		$this->login = $login;
+	}
+
+	public function setPassword($password) {
+		$this->password = $password;
+	}
+
+	public function setPrenom($prenom) {
+		$this->prenom = $prenom;
+	}
+
+	public function setNom($nom) {
+		$this->nom = $nom;
+	}
+
+	public function setActive($active) {
+		$this->active = $active;
+	}
+
+	public function setGroupe() {
+		return $this->groupe;
+	}
+
+	public function setDataAccess() {
+		return $this->dataAccess;
+	}
 	
 	// retourne un tableau associatif de toutes les propriétés de l'objet
 	public function listeAttributs() {
@@ -73,11 +101,7 @@ class Utilisateur {
 	}
 
 	public function setUser() {
-		if ($this->dataAccess->existsUser($this->login)) {
-			$this->dataAccess->update($this);
-		} else {
-			$this->dataAccess->insert($this);
-		}
+		$this->dataAccess->setUser($this); 
 	}
 
 	public function deleteUser() {

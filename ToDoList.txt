@@ -1,1 +1,5 @@
 Champs commentaires dans les fichiers Fournisseurs Articles Etablissements Deposts, Positions etc
+
+gestion des verouiilages d'enregistrements
+
+

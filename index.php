@@ -24,7 +24,10 @@ if ($userADO->existsUser($user)) {
 	$shoudusse = $resultat[0];
 }
 
-$shoudusse->deleteUser($shoudusse);
+// $shoudusse->deleteUser($shoudusse);
+$shoudusse->setNom('trucmuche');
+$shoudusse->setUser();
+
 
 
 

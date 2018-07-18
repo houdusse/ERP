@@ -50,28 +50,21 @@ class UtilisateurManager extends DataManager {
 
 
 	public function setUser(Utilisateur $user) {
-		$parametres = $this->contruireParametres($user);
-		if (existsUser($user->getLogin())) { // Si deja existant en base alors on modifie
+		$parametres = $this->construireParametres($user);
+		if ($this->existsUser($user->getLogin())) { // Si deja existant en base alors on modifie
 			foreach ($parametres as $key => $value) {
 				if ($id = 'id') {
 					unset($parametres['id']);
 				}
 			}
-			$sql = 'UPDATE Utilisateurs
-				SET 
-					nom = :nom,
-					prenom = : prenom,
-					password = :password,
-					active = :active
-				WHERE
-					id = :id';
+			$sql = $this->constructionRequete('UPDATE', $parametres, 'Utilisateurs');
 		} else { // si non existant en base il faut le créer
 			$sql = 'INSERT INTO Utilisateurs 
 					(login, nom, prenom, password, valide)
 					VALUES
 					(:login, :nom, :prenom, :password, :valide)';  		
 		}
-		$this->ADO($sql, $parametres, null, $DB); 
+		$this->ADO($sql, $parametres, null, $this->DB); 
 	}
 
 
