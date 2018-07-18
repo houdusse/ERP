@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Utilisateurs (
 	prenom VARCHAR(20),
 	nom VARCHAR(20),
 	active BOOLEAN,
-	UNIQUE(login);
+	UNIQUE(login),
 	PRIMARY KEY(id)
 )
 ;

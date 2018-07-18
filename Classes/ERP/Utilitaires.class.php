@@ -5,12 +5,11 @@ use \PDO;
 abstract class Utilitaires {
 
 	public static function chargeurClasse($classe) {
-		var_dump($classe);
 		$classe = strrchr($classe,'\\');
 		$classe = substr($classe, 1);
-		var_dump($classe);
 		$chemin = 'Classes/';
 		$nomQualifie = $chemin . $classe. '.class.php';
+		var_dump($nomQualifie);
 		require $nomQualifie;
 	}
 
@@ -28,6 +27,12 @@ abstract class Utilitaires {
 		}
 		$chaine .= '</table>';
 		return $chaine;
+	}
+
+	public static function className($objet) {
+		$instrospection = new \ReflectionObject($objet);
+		$className = $instrospection->getName();
+		return $className;
 	}
 	
 }

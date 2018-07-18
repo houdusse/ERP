@@ -5,6 +5,7 @@ use shoudusse\ERP\UtilisateurManager;
 use shoudusse\ERP\Connexion;
 use shoudusse\ERP\Utilisateur;
 use shoudusse\ERP\Utilitaires;
+use shoudusse\ERP\Groupe;
 
 // Mise en place de l'autoloader
 require 'classes/autoloader.class.php';
@@ -16,9 +17,8 @@ Autoload::autoloader();
 // Appel methodes Utilitaires::test($connexion, $criteres)
 $user = 'shoudusse';
 
-global $DB;
-$DB =  Connexion::connect();
-$userADO = UtilisateurManager::initManager($DB); 
+Connexion::connect();
+$userADO = UtilisateurManager::initManager(Connexion::getDB()); 
 if ($userADO->existsUser($user)) {
 	$resultat = $userADO->getUser($user);
 	$shoudusse = $resultat[0];
@@ -27,14 +27,18 @@ if ($userADO->existsUser($user)) {
 // $shoudusse->deleteUser($shoudusse);
 // $shoudusse->setNom('trucmuche');
 // $shoudusse->setUser();
-$userTest = new Utilisateur($DB);
-$userTest->setLogin('blablabla');
-$userTest->setNom('mon nom2');
-$userTest->setPrenom('mon prenom');
-$userTest->setPassword('bidon');
-$userTest->setActive(1);
-$userTest->setUser();
-
+$groupe = new Groupe();
+$groupe->setLibelle('Depot');
+var_dump($groupe);
+if ($groupe->ifExists())
+	echo '<br>Bien joué<br>';
+$mongroupe = $groupe->getGroup();
+var_dump($mongroupe[0]);
+$mongroupe[0]->setGroup();
+$mongroupe[0]->deleteGroup();
+$nouveau = new Groupe();
+$nouveau->setLibelle('Informatique');
+$nouveau->setGroup();
 
 
 

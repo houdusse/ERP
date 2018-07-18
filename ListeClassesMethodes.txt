@@ -23,12 +23,12 @@ Utilisateur::delete(Utilisateur $user) Cherche si l'utilisateur $user est en BDD
 
 
 ******************************************************
-class DataManager (classe mère de tout les managers) *
+class DataManager (classe mère de tous les managers) *
 ******************************************************
 DataManager::ADO($chaineSql , array $parametres, $class, PDO $DB) methode generique permetant d'executer prepare(), execute() et fetch() à partir d'une chaine sql, d'un tableau associatif de parametre sous la forme array('i:' => 1, ':login' => 'administreur', ....) contenant les zones parametrables de la requete et les valeurs associés (pour faire le bind), d'un objet afin de savoir sous quelle forme remonter le resulat (tableau d'objet $class ou tableau indexé si class = null) et d'une instance PDO.
 
-array Datamanager::ConstruireParametres($class) Fonction utilisant l'introspection pour créer à partir de n'importe quelle classe $class un tableau de parametre sous la forme array('i:' => 1, ':login' => 'administreur', ....) en listant les attribut de la classe inspectée. La methode est utilisée pour appeler d'autres méthodes comme DataManagerADO() par exemple 
+array Datamanager::ConstruireParametres($class) Fonction utilisant l'introspection pour créer à partir de n'importe quelle classe $class un tableau de parametre sous la forme array('i:' => 1, ':login' => 'administreur', ....) en listant les attribut de la classe inspectée. La methode est utilisée pour appeler d'autres méthodes comme DataManager::ADO() par exemple 
 
-array Datamanager::recupID($table, array $valeurs, PDO $DB) La methode retourne soit un tableau d'objet soir un tableau indexé resultant d'une requete sour la forme SELECT * FROM TABLE WHERE zone1 = :zone1 AND zone2 =:zone2 ... à partie d'un nom de table, d'un tableau associatif sous la forme array('i:' => 1, ':login' => 'administreur', ....) d'un nom de classe (si $class = null on retourne un tableau indexé sinon tableau d'objet de la classe) et d'une connexion $DB
+array Datamanager::recupID($table, array $valeurs, PDO $DB) La methode retourne soit un tableau d'objet soir un tableau indexé resultant d'une requete sour la forme SELECT * FROM TABLE WHERE zone1 = :zone1 AND zone2 =:zone2 ... à partie d'un nom de table, d'un tableau associatif sous la forme array('id:' => 1, ':login' => 'administreur', ....) d'un nom de classe (si $class = null on retourne un tableau indexé sinon tableau d'objet de la classe) et d'une connexion $DB
 
 

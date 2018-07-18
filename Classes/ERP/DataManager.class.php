@@ -4,8 +4,9 @@ abstract  class DataManager {
 
 	// methode generique lançant une requête SQL sur la base et renvoyant
 	// soit un tableau d'objets soit un tableau indexé
-	protected function ADO($sql, array $parametres, $class,$DB) {
+	protected function ADO($sql, array $parametres, $class) {
 		try {
+			$DB = Connexion::getDB();
 			$tableau = null;
 			$statement = $DB->prepare($sql);
 			// Si le retour doit se faire par objet $class n'est pas null et contient le nom de la classe à utiliser 
@@ -15,6 +16,7 @@ abstract  class DataManager {
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(\PDO::FETCH_NUM);
 			}
+			var_dump($sql);
  			$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
 			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
@@ -103,7 +105,8 @@ abstract  class DataManager {
 		return $chainesql;
 	}
 
-	protected function recupId($table, array $valeurs, $DB) {
+
+	protected function recupId($table, array $valeurs, $className) {
 		$sql = 'SELECT * FROM ' . $table .' WHERE ';
 		foreach ($valeurs as $key => $value) {
 			$pattern = '/(^:)/';
@@ -115,9 +118,7 @@ abstract  class DataManager {
 		$sql = trim($sql);
 		$pattern = '/(AND$)/';
 		$sql = preg_replace($pattern, $remplacement, $sql);
-		var_dump($sql);
-		var_dump($valeurs);
-		$resultat = $this->ADO($sql, $valeurs, 'shoudusse\ERP\Utilisateur', $DB);
+		$resultat = $this->ADO($sql, $valeurs, $className);
 		return $resultat;
 	}
 

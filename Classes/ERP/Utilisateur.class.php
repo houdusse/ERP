@@ -19,7 +19,7 @@ class Utilisateur {
 
 	// Construteurs
 	public function __Construct($DB ) {
-		$this->dataAccess = UtilisateurManager::initManager($DB); // Singleton
+		$this->dataAccess = UtilisateurManager::initManager(); // Singleton
 		echo 'constructeur Utilisateur';
 	} 
 
@@ -59,6 +59,12 @@ class Utilisateur {
 	}
 
 	// les Seters
+
+	public function setId($id) {
+		if ($this->getId() == null) {
+			$this->id = $id;
+		}
+	}
 	public function setLogin($login) {
 		$this->login = $login;
 	}
@@ -105,9 +111,17 @@ class Utilisateur {
 		var_dump($this);
 	}
 
-	public function deleteUser() {
+	/*public function deleteUser() {
 		if ($this->dataAccess->existsUser($this->login)) {
 			$this->dataAccess->delete($this);
+		}
+	}*/
+
+	public function setUser() {	
+		if ($this->ifExists()) {
+			$this->dataAccess->updateGroup($this);
+		} else {
+			$this->dataAccess->writeGroup($this);
 		}
 	}
 
