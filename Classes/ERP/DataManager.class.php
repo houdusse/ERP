@@ -15,7 +15,7 @@ abstract  class DataManager {
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(\PDO::FETCH_NUM);
 			}
- 				$statement->execute($parametres);
+ 			$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
 			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
 				while ($donnees = $statement->fetch()) {
@@ -34,22 +34,23 @@ abstract  class DataManager {
 	protected function construireParametres($objet) {
 		$tableau = null;
 		$instrospection = new \ReflectionObject($objet);
-		
-		foreach ($instrospection ->getProperties() as $attribut) {
+		$className = $instrospection->getName();
+		$proprietes = $instrospection->getProperties();
+		foreach ($proprietes as $attribut) {
 			$attribut->setAccessible(true);
 			$nomAttribut = $attribut->getName();
-			// On ne recherche que les attributs scalaire (non tableau et non objet)
 			$nomMethode = 'get'. ucfirst($nomAttribut); // nom du getter dans objet
-			$scalaire = true;
-			if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
-				$scalaire = false;
-			}
-			if ( $scalaire) { 
-			$tableau[':' . $nomAttribut] = $attribut->getValue($objet);
-			$attribut->setAccessible(false);
-			}
+			if (method_exists($objet, $nomMethode)) {
+				$scalaire = true;
+				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
+					$scalaire = false;
+				}
+				if ( $scalaire) { 
+					$tableau[':' . $nomAttribut] = $attribut->getValue($objet);
+					$attribut->setAccessible(false);
+				}
+			}	
 		}
-		
 		return $tableau;
 	}
 
@@ -68,17 +69,15 @@ abstract  class DataManager {
 					}
 				}
 				// Suppression de la derniere ','
-				$chainesql = substr_replace($chainesql, ')', -1, -2);
+				$chainesql = substr_replace($chainesql, ')', -2, -1);
 				$chainesql .= ' VALUES (';
 				foreach ($paramètres as $key => $value) {
 					if ($key !== ':id') {
 						$chainesql .=  $key .', ';
-						var_dump($chainesql);
-						echo '<br>';
 					}
 				}
 				// Suppression de la derniere ','
-				$chainesql = substr_replace($chainesql, ')', -1, -2);
+				$chainesql = substr_replace($chainesql, ')', -2, -1);
 
 				break;
 			case 'DELETE':
@@ -102,6 +101,24 @@ abstract  class DataManager {
 				break;
 		}
 		return $chainesql;
+	}
+
+	protected function recupId($table, array $valeurs, $DB) {
+		$sql = 'SELECT * FROM ' . $table .' WHERE ';
+		foreach ($valeurs as $key => $value) {
+			$pattern = '/(^:)/';
+			$remplacement = "";
+			$clefs = preg_replace($pattern, $remplacement, $key);
+			$sql .= "$clefs = $key AND "; 
+		}
+		// suppression du dernier AND
+		$sql = trim($sql);
+		$pattern = '/(AND$)/';
+		$sql = preg_replace($pattern, $remplacement, $sql);
+		var_dump($sql);
+		var_dump($valeurs);
+		$resultat = $this->ADO($sql, $valeurs, 'shoudusse\ERP\Utilisateur', $DB);
+		return $resultat;
 	}
 
 } 

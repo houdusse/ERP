@@ -101,7 +101,8 @@ class Utilisateur {
 	}
 
 	public function setUser() {
-		$this->dataAccess->setUser($this); 
+		$this->dataAccess->setUser($this);
+		var_dump($this);
 	}
 
 	public function deleteUser() {

@@ -1,0 +1,34 @@
+********************
+Classe Utilisateur *
+********************
+Utilisateur::__construct(PDO $BD) 	initialise le manager si pas enore créer (Singleton)
+
+Utilisateur::setUser() Demande à UtilisateurManager de créer l'enregistrement à partir de l'objet courant ou si il existe en base de le modifier.
+
+Utilisateur::deleteUser() Demande au manager de supprimer dans la base l'objetcourant
+
+
+**************************
+class UtilisateurManager *
+**************************
+UtilisateurManager::initManager(PDO $DB) methode statique car UtilisateurManager est un singleton
+
+boll UtilisateurManager::existUser($login) Permet de savoir si le login (UNIQUE) existe dans la base
+
+array Utilisateur UtilisateurManager::getUser($login) Renvoie sous forme d'un tableau d'objet Utilisateur l'enregistrment dans la base correspont à $login
+
+Utilisateur::setUser(Utilisateur $user) Si $user existe deja en BDD alors il est mis à jour à partir des valeurs de $user sinon il est créer dans la BDD toujours à partir des valeurs de $user
+
+Utilisateur::delete(Utilisateur $user) Cherche si l'utilisateur $user est en BDD et si oui il le supprime sinon rien
+
+
+******************************************************
+class DataManager (classe mère de tout les managers) *
+******************************************************
+DataManager::ADO($chaineSql , array $parametres, $class, PDO $DB) methode generique permetant d'executer prepare(), execute() et fetch() à partir d'une chaine sql, d'un tableau associatif de parametre sous la forme array('i:' => 1, ':login' => 'administreur', ....) contenant les zones parametrables de la requete et les valeurs associés (pour faire le bind), d'un objet afin de savoir sous quelle forme remonter le resulat (tableau d'objet $class ou tableau indexé si class = null) et d'une instance PDO.
+
+array Datamanager::ConstruireParametres($class) Fonction utilisant l'introspection pour créer à partir de n'importe quelle classe $class un tableau de parametre sous la forme array('i:' => 1, ':login' => 'administreur', ....) en listant les attribut de la classe inspectée. La methode est utilisée pour appeler d'autres méthodes comme DataManagerADO() par exemple 
+
+array Datamanager::recupID($table, array $valeurs, PDO $DB) La methode retourne soit un tableau d'objet soir un tableau indexé resultant d'une requete sour la forme SELECT * FROM TABLE WHERE zone1 = :zone1 AND zone2 =:zone2 ... à partie d'un nom de table, d'un tableau associatif sous la forme array('i:' => 1, ':login' => 'administreur', ....) d'un nom de classe (si $class = null on retourne un tableau indexé sinon tableau d'objet de la classe) et d'une connexion $DB
+
+

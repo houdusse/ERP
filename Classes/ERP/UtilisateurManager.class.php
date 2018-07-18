@@ -40,11 +40,9 @@ class UtilisateurManager extends DataManager {
 
 
 	public function getUser($critere) {
-		// $bidon = new shoudusse\ERP\Utilisateur();
 		$param = array(':critere' => $critere);
 		$sql = 'SELECT * FROM Utilisateurs WHERE login = :critere';
 		$tableau = $this->ADO($sql, $param, 'shoudusse\ERP\Utilisateur', $this->DB);
-		var_dump($tableau);
 		return $tableau;
 	}
 
@@ -52,17 +50,16 @@ class UtilisateurManager extends DataManager {
 	public function setUser(Utilisateur $user) {
 		$parametres = $this->construireParametres($user);
 		if ($this->existsUser($user->getLogin())) { // Si deja existant en base alors on modifie
-			foreach ($parametres as $key => $value) {
-				if ($id = 'id') {
-					unset($parametres['id']);
-				}
-			}
+			$this->recupId('Utilisateurs', array(':login' => $user->getLogin() ),$this->DB);
 			$sql = $this->constructionRequete('UPDATE', $parametres, 'Utilisateurs');
+
 		} else { // si non existant en base il faut le créer
-			$sql = 'INSERT INTO Utilisateurs 
-					(login, nom, prenom, password, valide)
-					VALUES
-					(:login, :nom, :prenom, :password, :valide)';  		
+				foreach ($parametres as $key => $value) {
+					if ($key = ':id') {
+						unset($parametres[':id']);
+					}	
+				}
+				$sql = $this->constructionRequete('INSERT', $parametres, 'Utilisateurs');
 		}
 		$this->ADO($sql, $parametres, null, $this->DB); 
 	}
@@ -71,7 +68,6 @@ class UtilisateurManager extends DataManager {
 	public function delete(Utilisateur $user) {
 		$parametres = $this->construireParametres($user);
 		echo '<br> par ici <br>';
-		var_dump($parametres);
 		if (array_key_exists(':id', $parametres) and ($this->existsUser($user->getLogin()))) {
 			$sql = $this->constructionRequete('DELETE', $parametres, 'Utilisateurs');
 			$this->ADO($sql, array(':id' => $parametres[':id']), null, $this->DB);
@@ -82,8 +78,6 @@ class UtilisateurManager extends DataManager {
 		$parametres = $this->ConstruireParametres($user);
 		$table = 'Utilisateurs';
 		$chaine = $this->constructionRequete($instruction, $parametres, $table);
-		var_dump($chaine);
-		echo '<br>';
 
 	}
 

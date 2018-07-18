@@ -25,8 +25,15 @@ if ($userADO->existsUser($user)) {
 }
 
 // $shoudusse->deleteUser($shoudusse);
-$shoudusse->setNom('trucmuche');
-$shoudusse->setUser();
+// $shoudusse->setNom('trucmuche');
+// $shoudusse->setUser();
+$userTest = new Utilisateur($DB);
+$userTest->setLogin('blablabla');
+$userTest->setNom('mon nom2');
+$userTest->setPrenom('mon prenom');
+$userTest->setPassword('bidon');
+$userTest->setActive(1);
+$userTest->setUser();
 
 
 

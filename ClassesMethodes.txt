@@ -2,4 +2,6 @@
 
 programme		Classe UtilisateurManager
 			-> 	bool UtilisateurManager::existsUser()
-			-> 	array Object|array String UtilisateurManager::getUser 			
+			-> 	array Object|array String UtilisateurManager::getUser
+																		-> array Object|array String DataManager::ADO 	
+			->	UtilisateurManager::delete()
