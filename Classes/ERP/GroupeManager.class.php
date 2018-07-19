@@ -46,7 +46,7 @@ class GroupeManager extends DataManager {
 		$instruction = 'DELETE';
 		$parametres = array(':id' => $group->getId());
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
+		$chaineSql = $this->buidRequest($instruction, $parametres, self::TABLE_SQL);
 		echo '---DELETE----';
 		var_dump($chaineSql);
 
@@ -62,7 +62,7 @@ class GroupeManager extends DataManager {
 		$instruction = 'UPDATE';
 		$parametres = $this->construireParametres($group);
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
+		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 		echo '---UPDATE----';
 		var_dump($chaineSql);
 		// $this->ADO($chaineSql, $parametres, $className);
@@ -73,7 +73,7 @@ class GroupeManager extends DataManager {
 		$instruction = 'INSERT';
 		$parametres = $this->construireParametres($group);
 		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
+		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 		echo '---INSERT----';
 		var_dump($chaineSql);
 

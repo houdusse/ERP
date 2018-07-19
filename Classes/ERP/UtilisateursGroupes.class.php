@@ -64,7 +64,7 @@ class UtilisateursGroupes  {
 		$this->dataAccess->dataAccess($this, 'DELETE');
 	}
 
-	public function myGroups(Utilisateur $user) {
+	public function hisGroups(Utilisateur $user) {
 		$resultat =$this->dataAccess($user);
 		return $resultat;
 	}

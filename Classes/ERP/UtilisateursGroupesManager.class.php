@@ -18,7 +18,7 @@ class UtilisateursGroupesManager extends DataManager {
 	}
 
 	// Teste l'existance d'un etablissement par recherche sur le libelle
-	public function existsEtablissment(UtilisateursGroupes $link) {
+	public function existsUtilisateursGroupes(UtilisateursGroupes $link) {
 		$className = Utilitaires::className($link);
 		$criteres = array(':Iduser' => $link->getIduser(),
 							'Idgroupe' => $link->getIdgroupe);
@@ -43,9 +43,9 @@ class UtilisateursGroupesManager extends DataManager {
 	}
 
 	// retourne l'ensemble de liens UtilisateursGroupes pour un utilisateur donné ($user)
-	public function myGroups($utilisateurs $user) {
+	public function hisGroups($utilisateurs $user) {
 		$criteres  = array(':idUtilisateur' => $user->getI());
-		$className = 'shoudusse/ERP/UtilisateursGroupes';
+		$className = Utilitaires::className($this);
 		$tableau = $this->recupId(self::TABLE_SQL, $criteres, $className);
 		echo '----getIdUtilisateursGroups----';
 		var_dump($tableau);
@@ -62,7 +62,7 @@ class UtilisateursGroupesManager extends DataManager {
 		$instruction = $operation;
 		$parametres = $this->construireParametres($etablissement);
 		$className = Utilitaires::className($etablissement);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
+		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 	} 
 }
 

@@ -51,15 +51,7 @@ class UtilisateurManager extends DataManager {
 			return false;
 		}
 
-	}
-
-
-	/*public function getUser($critere) {
-		$param = array(':critere' => $critere);
-		$sql = 'SELECT * FROM Utilisateurs WHERE login = :critere';
-		$tableau = $this->ADO($sql, $param, 'shoudusse\ERP\Utilisateur');
-		return $tableau;
-	}*/
+	
 
 
 	// Retourne un tableau d'object Groupe avec 1 objet trouve par le libelle
@@ -104,40 +96,32 @@ class UtilisateurManager extends DataManager {
 
 	// met a jours la base avec l'objet reçu en parametre
 	public function updateUser(Utilisateur $user) {
-		if ($user->getId() === null) {
+	 	if ($user->getId() === null) {
 			$retour = $this->getUser($user);
 			$user->setId($retour[0]->getId());
 		}
 		$instruction = 'UPDATE';
 		$parametres = $this->construireParametres($user);
 		$className = Utilitaires::className($user);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
-		echo '---UPDATE----';
-		var_dump($chaineSql);
+		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
+	}
+
+
+
+
+	public function dataAccess(UtilisateursGroupes $link, $operation) {
+		if ($operation == 'UPDATE') {
+			if ($link->getId() === null) {
+				$retour = $this->getUsersGroups($link);
+				$etablissement->setId($retour[0]->getId());
+			}
+		}
+		$instruction = $operation;
+		$parametres = $this->construireParametres($etablissement);
+		$className = Utilitaires::className($etablissement);
+		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 		// $this->ADO($chaineSql, $parametres, $className);
-	}
-
-	// Insere l'objet reçu en parametre dans la base
-	public function writeUser(Utilisateur $user) {
-		$instruction = 'INSERT';
-		$parametres = $this->construireParametres($user);
-		$className = Utilitaires::className($user);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
-		echo '---INSERT----';
-		var_dump($chaineSql);
-	}
-
-	// Supprime le Groupe de la base
-	public function deleteUser(Utilisateur $user) {
-		$instruction = 'DELETE';
-		$parametres = array(':id' => $user->getId());
-		$className = Utilitaires::className($group);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
-		echo '---DELETE----';
-		var_dump($chaineSql);
-
-		// $this->ADO($chaineSql, $parametres, $className);
-	}
+	} 
 
 }
 

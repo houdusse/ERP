@@ -1,0 +1,65 @@
+
+
+Class DataManager
+DataManager::ADO()
+Datamanager::buildRequest()
+****** DataManager::getId() ******
+DataManager::getSelected()
+DataManager::objectToArray() 
+
+
+Class GroupeManager
+GroupeManager::existsGroup()
+GroupeManager::getGroup()
+GroupeManager::deleteGroup()
+GroupeManager::updateGroup()
+GroupeManager::writeGroup()
+
+
+
+
+UtilisateursGroupesManager()
+UtilisateursGroupesManager::existUtilisateursGroupes()
+UtilisateursGroupesManager::myGroups()
+UtilisateursGroupesManager::getUsersGroup()
+UtilisateursGroupesManager::dataAccess()
+
+
+UtilisateursGroupes
+UtilisateursGroupes::ifExists()
+UtilisateursGroupes::setUtilisateursGroupes()
+UtilisateursGroupes::getUtilisateursGroupes()
+UtilisateursGroupes::deleteUtilisateursGroupes()
+UtilisateursGroupes::isGroups()
+
+
+Class Group
+Group::Ifexist()
+Group::setGroup()
+Group::getGroup()
+Group::deleteGroup()
+
+Class User
+User::ifExists()
+User::setUser()
+User::getUser()
+User::deletedUser()
+User::myGroups()
+
+Class $Etablissement
+Etablissement::ifExists()
+Etablissement::setEtablissement()
+Etablissement::getEtablissement()
+Etablissement::deletedEtablissement()
+
+Class Module
+Module::ifExists()
+Module::setModule()
+Module::getModule()
+Module::deletedModule()
+
+Class Fonctionalite
+Fonctionalite::ifExists()
+Fonctionalite::setFonctionalite()
+Fonctionalite::getFonctionalite()
+Fonctionalite::deletedFonctionalite()

@@ -92,37 +92,26 @@ class Utilisateur {
 	public function setDataAccess() {
 		return $this->dataAccess;
 	}
+	//***********************************************************
 	
-	/*// retourne un tableau associatif de toutes les propriétés de l'objet
-	public function listeAttributs() {
-		$tableau = array(
-			'id' => $this->getId(),
-			'login' => $this->getLogin(),
-			'password' => $this->getPassword(),
-			'prenom' => $this->getPrenom(),
-			'nom' => $this->getNom(),
-			'active' => $this->getActive(),
-		);
-		return $tableau;
-	}*/
-
-	public function setUser() {
+	public function getUser() {
 		$this->dataAccess->setUser($this);
 		var_dump($this);
 	}
 
-	/*public function deleteUser() {
-		if ($this->dataAccess->existsUser($this->login)) {
-			$this->dataAccess->delete($this);
-		}
-	}*/
-
+	public function ifExists($this) {
+		$this->dataAccess->existsUser($this)
+	}
 	public function setUser() {	
 		if ($this->ifExists()) {
 			$this->dataAccess->updateUser($this);
 		} else {
 			$this->dataAccess->writeUser($this);
 		}
+	}
+
+	public function deleteUser() {
+
 	}
 
 	public function myGroups($this) {

@@ -1,4 +1,4 @@
-********************
+ ********************
 Classe Utilisateur *
 ********************
 Utilisateur::__construct(PDO $BD) 	initialise le manager si pas enore créer (Singleton)

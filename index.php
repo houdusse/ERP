@@ -18,7 +18,7 @@ Autoload::autoloader();
 $user = 'shoudusse';
 
 Connexion::connect();
-$userADO = UtilisateurManager::initManager(Connexion::getDB()); 
+.*$userADO = UtilisateurManager::initManager(Connexion::getDB()); 
 if ($userADO->existsUser($user)) {
 	$resultat = $userADO->getUser($user);
 	$shoudusse = $resultat[0];
@@ -26,7 +26,7 @@ if ($userADO->existsUser($user)) {
 
 // $shoudusse->deleteUser($shoudusse);
 // $shoudusse->setNom('trucmuche');
-// $shoudusse->setUser();
+// $shoudusse->setUser();*/ 
 $groupe = new Groupe();
 $groupe->setLibelle('Depot');
 var_dump($groupe);

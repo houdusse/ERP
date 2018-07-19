@@ -33,30 +33,22 @@ abstract  class DataManager {
 
 
 	// Methode qui renvoie un tableau associatif contenent tout les parametres
-	protected function construireParametres($objet) {
-		$tableau = null;
-		$instrospection = new \ReflectionObject($objet);
-		$className = $instrospection->getName();
-		$proprietes = $instrospection->getProperties();
-		foreach ($proprietes as $attribut) {
-			$attribut->setAccessible(true);
-			$nomAttribut = $attribut->getName();
-			$nomMethode = 'get'. ucfirst($nomAttribut); // nom du getter dans objet
-			if (method_exists($objet, $nomMethode)) {
-				$scalaire = true;
-				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
-					$scalaire = false;
-				}
-				if ( $scalaire) { 
-					$tableau[':' . $nomAttribut] = $attribut->getValue($objet);
-					$attribut->setAccessible(false);
-				}
-			}	
-		}
+	protected function construireParametres($objet, $exclude = null) {
+		$tableau = ObjectToArray($objet, , $exclude, true);			
 		return $tableau;
 	}
 
-	protected function constructionRequete($instruction, array $paramètres, $table) {
+	/* Methode qui construit la chaine sql utilisée dans PDO:prepare()
+	le parametre $instruction contient la commande sql à executer
+	Le parametre $parametre contient la liste des variables :var à utiliser dans
+	la requete.
+	le parametre $table contient le nom de la table utilisée dans la commande SQL
+	requetes générées :
+	SELECT * FROM $table WHERE var = :var1 AND var2 = :var2 AND var3 = :var3 ...
+	INSERT INTO $table (var1, var2, var3, ...) VALUES (:var1, :var2, :var3, ...) 
+	UPDATE $TABLE SET var1 = :var1, var2 = :var2, ... WHERE id = :id
+	DELETE FROM $table WHERE id = :id */
+	protected function BuildRequest($instruction, array $paramètres, $table) {
 		$chainesql = '';
 		switch ($instruction) {
 			case 'SELECT':
@@ -105,7 +97,7 @@ abstract  class DataManager {
 	}
 
 
-	protected function recupId($table, array $valeurs, $className) {
+	protected function getSelected ($table, array $valeurs, $className) {
 		$sql = 'SELECT * FROM ' . $table .' WHERE ';
 		foreach ($valeurs as $key => $value) {
 			$pattern = '/(^:)/';
@@ -119,6 +111,35 @@ abstract  class DataManager {
 		$sql = preg_replace($pattern, $remplacement, $sql);
 		$resultat = $this->ADO($sql, $valeurs, $className);
 		return $resultat;
+	}
+
+	/*Methode generique listant dans un tableau associatif l'ensemble des attributs
+	scalaires de l'objet $objet ainsi que leurs valeurs respectives, à l'exclusion des attributs listés  dans le tableau $exclude. Si le parametre $colonChar = true alors on ajoute ':' devant les nom des attributs afin de pouvoir les utiliser en SQL avec PDO::prepare()*/ 
+	public function ObjectToArray($objet, array $exclude, $colonChar )*/
+		$tableau = null;
+		$colon = ''
+		if ($colonChar) {
+			$colon = ':';
+		}
+		$instrospection = new \ReflectionObject($objet);
+		$className = $instrospection->getName();
+		$proprietes = $instrospection->getProperties();
+		foreach ($proprietes as $attribut) {
+			$attribut->setAccessible(true);
+			$nomAttribut = $attribut->getName();
+			$nomMethode = 'get'. ucfirst($nomAttribut); // nom du getter dans objet
+			if (method_exists($objet, $nomMethode)) {
+				$scalaire = true;
+				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
+					$scalaire = false;
+				}
+				if ( $scalaire AND (! in_array($nomAttribut, $exclude))) { 
+					$tableau[$colon . $nomAttribut] = $attribut->getValue($objet);
+				}
+					$attribut->setAccessible(false);
+			}	
+		}
+		return $tableau;	
 	}
 
 } 

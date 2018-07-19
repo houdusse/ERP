@@ -89,7 +89,7 @@ class EtablissementManager extends DataManager {
 		$instruction = $operation;
 		$parametres = $this->construireParametres($etablissement);
 		$className = Utilitaires::className($etablissement);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
+		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 	} 
 }
 

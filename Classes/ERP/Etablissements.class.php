@@ -84,6 +84,9 @@ class Etablissement  {
 	public function setVille($ville) {
 		$this->ville = $ville;
 	}
+
+	//***********************************************************************************
+
 	public function ifExists() {
 		$reponse = $this->dataAccess->existsEtablissement($this);
 		return $reponse;
