@@ -93,11 +93,7 @@ class Etablissement  {
 	}
 
 	public function setEtablissement() {	
-		if ($this->ifExists()) {
-			$this->dataAccess->dataAccess($this, 'UPDATE');
-		} else {
-			$this->dataAccess->dataAccess($this, 'INSERT');
-		}
+		$this->dataAccess->setEtablissement($this);
 	}
 
 	public function getEtablissement() {

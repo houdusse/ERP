@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Modules (
 )
 ;
 
-INSERT INTO Modules (nom) VALUES
+INSERT INTO Modules (libelle) VALUES
 ('Gestion Commerciale'),
 ('Comptatbilite'),
 ('Depots')

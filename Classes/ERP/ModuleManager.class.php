@@ -8,7 +8,7 @@ class ModuleManager extends DataManager {
 	// Methode pour initalisation Singleton
 	public static function initManager() {
 		if (self::$instance === null) {
-			self::$instance = new ModuleGroupesManager();
+			self::$instance = new ModuleManager();
 		}
 		return self::$instance;
 	} 
@@ -20,8 +20,8 @@ class ModuleManager extends DataManager {
 	// Teste l'existance d'un etablissement par recherche sur le libelle
 	public function existsModule(Module $module) {
 		$className = Utilitaires::className($module);
-		$criteres = array(':libelle' => $module->getLibelle();
-		$selection = $this->recupId(self::TABLE_SQL, $criteres, $className);
+		$criteres = array(':libelle' => $module->getLibelle());
+		$selection = $this->getSelected(self::TABLE_SQL, $criteres, $className);
 		if (count($selection) == 1) {
 			return true;
 		} else { 
@@ -32,14 +32,22 @@ class ModuleManager extends DataManager {
 
 	// Retourne un tableau d'object etablissement avec 1 objet trouve par le libelle
 	public function getModule(Module $module) {
-		$criteres  = array(':libelle' => $module->getLibelle();
+		$criteres  = array(':libelle' => $module->getLibelle());
 		$className = Utilitaires::className($module);
-		$tableau = $this->recupId(self::TABLE_SQL, $criteres, $className);
-		echo '----getIdUtilisateursGroups----';
-		var_dump($tableau);
+		$tableau = $this->getSelected(self::TABLE_SQL, $criteres, $className);
 		return $tableau;
 	}
 
+
+	
+
+	public function setModule (Module $module) {
+		if ($this->existsModule($module)) {
+			$this->dataAccess($module, 'UPDATE');
+		} else {
+			$this->dataAccess($module, 'INSERT');
+		}
+	}
 
 	public function dataAccess(Module $module, $operation) {
 		if ($operation == 'UPDATE') {
@@ -49,9 +57,16 @@ class ModuleManager extends DataManager {
 			}
 		}
 		$instruction = $operation;
-		$parametres = $this->construireParametres($module);
+		echo '--Operation--';
+		if ($operation == 'INSERT') {
+			$parametres = $this->construireParametres($module, array('id'));
+		} else	{
+			$parametres = $this->construireParametres($module);
+		}	
 		$className = Utilitaires::className($module);
 		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
+		$this->ADO($chaineSql, $parametres, $className);
+
 	} 
 }
 

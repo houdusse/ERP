@@ -18,7 +18,7 @@ class EtablissementManager extends DataManager {
 	}
 
 	// Teste l'existance d'un etablissement par recherche sur le libelle
-	public function existsEtablissment(Etablissement $etablissement) {
+	public function existsEtablissement(Etablissement $etablissement) {
 		$className = Utilitaires::className($Etablissement);
 		$criteres = array(':libelle' => $etablissement->getLibelle());
 		$selection = $this->recupId(self::TABLE_SQL, $criteres, $className);
@@ -41,43 +41,15 @@ class EtablissementManager extends DataManager {
 		return $tableau;
 	}
 
-	// Supprime le l'etablissement de la base
-	/*public function deleteEtablissement(Etablissement $etablissement) {
-		$instruction = 'DELETE';
-		$parametres = array(':id' => $etablissement->getId());
-		$className = Utilitaires::className($etablissement);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
-		echo '---DELETE----';
-		var_dump($chaineSql);
-
-		// $this->ADO($chaineSql, $parametres, $className);
-	} */
-
-	// met a jours la base avec l'objet reçu en parametre
-	/*public function updateEtablissement(Etablissement $etablissement) {
-		if ($etablissement->getId() === null) {
-			$retour = $this->getEtablissement($etablissement);
-			$etablissement->setId($retour[0]->getId());
+	public function setModule (Etablissement $etablissement) {
+		if ($this->existsEtablissement($etablissement)) {
+			$this->dataAccess($etablissement, 'UPDATE');
+		} else {
+			$this->dataAccess($etablissement, 'INSERT');
 		}
-		$instruction = 'UPDATE';
-		$parametres = $this->construireParametres($etablissement);
-		$className = Utilitaires::className($etablissement);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
-		echo '---UPDATE----';
-		var_dump($chaineSql);
-		// $this->ADO($chaineSql, $parametres, $className);
-	}*/
+	}
 
-	// Insere l'objet reçu en parametre dans la base
-	/*public function writeEtablissement(Etablissement $etablissement) {
-		$instruction = 'INSERT';
-		$parametres = $this->construireParametres($etablissement);
-		$className = Utilitaires::className($etablissement);
-		$chaineSql = $this->constructionRequete($instruction, $parametres, self::TABLE_SQL);
-		echo '---INSERT----';
-		var_dump($chaineSql);
-
-	}*/
+	/
 
 	public function dataAccess(Etablissement $etablissement, $operation) {
 		if ($operation == 'UPDATE') {
@@ -86,10 +58,16 @@ class EtablissementManager extends DataManager {
 				$etablissement->setId($retour[0]->getId());
 			}
 		}
+		if ($operation == 'INSERT') {
+			$parametres = $this->construireParametres($module, array('id'));
+		} else	{
+			$parametres = $this->construireParametres($module);
+		}
 		$instruction = $operation;
 		$parametres = $this->construireParametres($etablissement);
 		$className = Utilitaires::className($etablissement);
 		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
+		$this->ADO($chaineSql, $parametres, $className);
 	} 
 }
 

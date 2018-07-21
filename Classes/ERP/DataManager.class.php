@@ -11,12 +11,10 @@ abstract  class DataManager {
 			$statement = $DB->prepare($sql);
 			// Si le retour doit se faire par objet $class n'est pas null et contient le nom de la classe à utiliser 
 			if ($class !== null) {
-				echo 'fetch_class';
 				$retour = $statement->setFetchMode(\PDO::FETCH_CLASS, $class, array($DB));
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(\PDO::FETCH_NUM);
 			}
-			var_dump($sql);
  			$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
 			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
@@ -34,7 +32,10 @@ abstract  class DataManager {
 
 	// Methode qui renvoie un tableau associatif contenent tout les parametres
 	protected function construireParametres($objet, $exclude = null) {
-		$tableau = ObjectToArray($objet, , $exclude, true);			
+		if ($exclude === null) {
+			$exclude = array();
+		} 
+		$tableau = $this->ObjectToArray($objet, $exclude, true);			
 		return $tableau;
 	}
 
@@ -115,9 +116,9 @@ abstract  class DataManager {
 
 	/*Methode generique listant dans un tableau associatif l'ensemble des attributs
 	scalaires de l'objet $objet ainsi que leurs valeurs respectives, à l'exclusion des attributs listés  dans le tableau $exclude. Si le parametre $colonChar = true alors on ajoute ':' devant les nom des attributs afin de pouvoir les utiliser en SQL avec PDO::prepare()*/ 
-	public function ObjectToArray($objet, array $exclude, $colonChar )*/
+	public function ObjectToArray($objet, array $exclude, $colonChar ) {
 		$tableau = null;
-		$colon = ''
+		$colon = '';
 		if ($colonChar) {
 			$colon = ':';
 		}
@@ -133,7 +134,7 @@ abstract  class DataManager {
 				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
 					$scalaire = false;
 				}
-				if ( $scalaire AND (! in_array($nomAttribut, $exclude))) { 
+				if ( $scalaire AND !( in_array($nomAttribut, $exclude))) { 
 					$tableau[$colon . $nomAttribut] = $attribut->getValue($objet);
 				}
 					$attribut->setAccessible(false);

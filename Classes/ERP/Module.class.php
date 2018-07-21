@@ -9,7 +9,7 @@ class Module  {
 
 	
 	public function __construct() {
-		$this->dataAccess = UtilisateursGroupesManager::initManager(); // Singleton
+		$this->dataAccess = ModuleManager::initManager(); // Singleton
 		echo 'constructeur UtilisateursGroupes';
 	}
 
@@ -17,8 +17,8 @@ class Module  {
 		return $this->id;
 	}
 
-	public function getlibelle($libelle) {
-		return $this->idUtilisateur;
+	public function getlibelle() {
+		return $this->libelle;
 	}
 
 	public function setId($id) {
@@ -38,11 +38,7 @@ class Module  {
 	}
 
 	public function setModule() {	
-		if ($this->ifExists()) {
-			$this->dataAccess->dataAccess($this, 'UPDATE');
-		} else {
-			$this->dataAccess->dataAccess($this, 'INSERT');
-		}
+		$this->dataAccess->setModule($this);
 	}
 
 	public function getModule() {
