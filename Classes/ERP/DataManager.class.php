@@ -10,13 +10,11 @@ abstract  class DataManager {
 			$tableau = null;
 			$statement = $DB->prepare($sql);
 			// Si le retour doit se faire par objet $class n'est pas null et contient le nom de la classe à utiliser 
-			if ($class !== null) {
+			if ($class !== null) { // On recupères des objets de la classe $class
 				$retour = $statement->setFetchMode(\PDO::FETCH_CLASS, $class, array($DB));
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(\PDO::FETCH_NUM);
 			}
-			echo '---ICI le tableau des parametres---';
-			var_dump($parametres);
  			$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
 			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
@@ -33,6 +31,11 @@ abstract  class DataManager {
 
 
 	// Methode qui renvoie un tableau associatif contenent tout les parametres
+	// $objet = objet dont on liste le propriétées et les valeurs
+	// $exclude est un tableau qui contient les propritées à exclure du resultat
+	// $permute bool si a true alors le tableau $exculde contient les attributs à inculre dans le résulat
+	// $colonChar bool si a true rejoute ':' devant le nom des attributs selectionnés
+	// Si exclude est vide alors touts les attributs de l'objet sont sélectionnés 
 	protected function buildParameters($objet, $exclude = null,  $permute = false, $colonChar ) {
 		if ($exclude === null) {
 			$exclude = array();
@@ -40,6 +43,7 @@ abstract  class DataManager {
 		$tableau = $this->ObjectToArray($objet, $exclude, $permute, true);			
 		return $tableau;
 	}
+
 
 	/* Methode qui construit la chaine sql utilisée dans PDO:prepare()
 	le parametre $instruction contient la commande sql à executer
@@ -51,41 +55,55 @@ abstract  class DataManager {
 	INSERT INTO $table (var1, var2, var3, ...) VALUES (:var1, :var2, :var3, ...) 
 	UPDATE $TABLE SET var1 = :var1, var2 = :var2, ... WHERE id = :id
 	DELETE FROM $table WHERE id = :id */
-	protected function BuildRequest($instruction, array $paramètres, $table) {
+	protected function BuildRequest($instruction, array $parametres, $table) {
 		$chainesql = '';
 		switch ($instruction) {
+			
 			case 'SELECT':
-
+				// Le tableau $parametres contient les paramètres se situant après le WHERE de la requete
+				// car le SELECT  est toujours *
+				// Si plusieurs paramètres reçus alors ils sont enchainés avec des AND
+				$chainesql = $instruction .' * WHERE ';
+				foreach ($valeurs as $key => $value) {
+					$pattern = '/(^:)/';
+					$remplacement = "";
+					$clefs = preg_replace($pattern, $remplacement, $key);
+					$chainesql .= "$clefs = $value AND "; 
+				}
+				// suppression du dernier AND
+				$chainesql = trim($sql);
+				$pattern = '/(AND$)/';
+				$chainesql = preg_replace($pattern, $remplacement, $sql);
 				break;
 
 			case 'INSERT': 
 				$chainesql .= $instruction .' INTO ' . $table .' (';
 				foreach ($paramètres as $key => $value) {
 					if ($key !== ':id') {
-						$chainesql .=  substr($key, 1) .', ';
+						$chainesql .=  substr($key, 1) .', ';  // à ce niveau les paramètres sont sans ":" INSERT (parm1, parm2, parm3)
 					}
 				}
 				// Suppression de la derniere ','
 				$chainesql = substr_replace($chainesql, ')', -2, -1);
 				$chainesql .= ' VALUES (';
 				foreach ($paramètres as $key => $value) {
-					if ($key !== ':id') {
-						$chainesql .=  $key .', ';
+					if ($key !== ':id') {  // id n'est JAMAIS mis à jour
+						$chainesql .=  $key .', '; // dans la clause VALUES les paramètres sont sous la forme :nom = 'xxx'
 					}
 				}
 				// Suppression de la derniere ','
 				$chainesql = substr_replace($chainesql, ')', -2, -1);
-
 				break;
+
 			case 'DELETE':
-				$chainesql .= $instruction .' FROM ' .$table .' WHERE id = :id';
-
+				$chainesql .= $instruction .' FROM ' .$table .' WHERE id = :id'; // le DELETE se fait toujours sur l'id de l'enregistrement (non ambigue)
 				break;
+
 			case 'UPDATE':
 				$chainesql = $instruction . ' ' .$table .' SET ';
 				foreach ($paramètres as $key => $value) {
 					if ($key !== ':id') {
-						$chainesql .=  substr($key, 1) . ' = ' .$key .', ';
+						$chainesql .=  substr($key, 1) . ' = ' .$key .', '; // les paramètre sont sous la forme SET parm1 = 'xxxx', parm2 = 'xxxx' 
 					}
 				}
 				// Suppression de  la derniere ','
@@ -94,10 +112,10 @@ abstract  class DataManager {
 				break;
 			
 			default:
-				$chainesql = 'ERREUR INSTRUCTION ' .$instruction;
+				$chainesql = 'ERREUR INSTRUCTION ' .$instruction; // si instruction sql inconnue 
 				break;
 		}
-		return $chainesql;
+		return $chainesql; // la chaine sql prête à l'emploie
 	}
 
 
@@ -107,7 +125,7 @@ abstract  class DataManager {
 			$pattern = '/(^:)/';
 			$remplacement = "";
 			$clefs = preg_replace($pattern, $remplacement, $key);
-			$sql .= "$clefs = $key AND "; 
+			$sql .= "$clefs = $value AND "; 
 		}
 		// suppression du dernier AND
 		$sql = trim($sql);
@@ -134,7 +152,7 @@ abstract  class DataManager {
 			$nomMethode = 'get'. ucfirst($nomAttribut); // nom du getter dans objet
 			if (method_exists($objet, $nomMethode)) {
 				$scalaire = true;
-				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
+				if (is_array($objet->$nomAttribut)) OR is_object($objet->$nomAttribut)) {
 					$scalaire = false;
 				}
 				if ( $scalaire AND !( in_array($nomAttribut, $exclude)) AND ($permute !== true)) { 
@@ -147,7 +165,7 @@ abstract  class DataManager {
 					$attribut->setAccessible(false);
 			}	
 		}
-		return $tableau;	
+		return $tableau; // tableau associatif contenanant la liste des atributs scalaires de l'objet ainsi que les valeurs correspondantes	
 	}
 
 } 
