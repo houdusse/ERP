@@ -15,6 +15,8 @@ abstract  class DataManager {
 			} else { // Sinon on retourne un tableau indexé
 				$retour = $statement->setFetchMode(\PDO::FETCH_NUM);
 			}
+			echo '---ICI le tableau des parametres---';
+			var_dump($parametres);
  			$statement->execute($parametres);
 			// si la requete est SELECT alors on parcourt le curseur
 			if ( preg_match('#(^SELECT|select)#', $statement->queryString)) {
@@ -31,11 +33,11 @@ abstract  class DataManager {
 
 
 	// Methode qui renvoie un tableau associatif contenent tout les parametres
-	protected function construireParametres($objet, $exclude = null) {
+	protected function buildParameters($objet, $exclude = null,  $permute = false, $colonChar ) {
 		if ($exclude === null) {
 			$exclude = array();
 		} 
-		$tableau = $this->ObjectToArray($objet, $exclude, true);			
+		$tableau = $this->ObjectToArray($objet, $exclude, $permute, true);			
 		return $tableau;
 	}
 
@@ -53,6 +55,7 @@ abstract  class DataManager {
 		$chainesql = '';
 		switch ($instruction) {
 			case 'SELECT':
+
 				break;
 
 			case 'INSERT': 
@@ -116,7 +119,7 @@ abstract  class DataManager {
 
 	/*Methode generique listant dans un tableau associatif l'ensemble des attributs
 	scalaires de l'objet $objet ainsi que leurs valeurs respectives, à l'exclusion des attributs listés  dans le tableau $exclude. Si le parametre $colonChar = true alors on ajoute ':' devant les nom des attributs afin de pouvoir les utiliser en SQL avec PDO::prepare()*/ 
-	public function ObjectToArray($objet, array $exclude, $colonChar ) {
+	public function ObjectToArray($objet, array $exclude, $permute, $colonChar ) {
 		$tableau = null;
 		$colon = '';
 		if ($colonChar) {
@@ -134,9 +137,13 @@ abstract  class DataManager {
 				if (is_array($objet->$nomMethode()) OR is_object($objet->$nomMethode())) {
 					$scalaire = false;
 				}
-				if ( $scalaire AND !( in_array($nomAttribut, $exclude))) { 
+				if ( $scalaire AND !( in_array($nomAttribut, $exclude)) AND ($permute !== true)) { 
 					$tableau[$colon . $nomAttribut] = $attribut->getValue($objet);
 				}
+				if ( $scalaire AND ( in_array($nomAttribut, $exclude)) AND ($permute == true)) { 
+					$tableau[$colon . $nomAttribut] = $attribut->getValue($objet);
+				}
+
 					$attribut->setAccessible(false);
 			}	
 		}

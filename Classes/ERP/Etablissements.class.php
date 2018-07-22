@@ -1,11 +1,11 @@
 <?php
 namespace shoudusse\ERP;
-use shoudusse\ERP\EtablissementManager;
-class Etablissement  {
+use shoudusse\ERP\EtablissementsManager;
+class Etablissements  {
 
 	private $id;
 	private $code;
-	private $nom;
+	private $libelle;
 	private $adresse1;
 	private $adresse2;
 	private $adresse3;
@@ -14,7 +14,7 @@ class Etablissement  {
 	private $dataAccess;
 
 	public function __construct() {
-		$this->dataAccess = GroupeManager::initManager(); // Singleton
+		$this->dataAccess = EtablissementsManager::initManager(); // Singleton
 		echo 'constructeur Etablissement';
 		var_dump($this->dataAccess);
 	}
@@ -27,8 +27,8 @@ class Etablissement  {
 		return $this->code;
 	}
 
-	public function getNom() {
-		return $this->nom;
+	public function getLibelle() {
+		return $this->libelle;
 	}
 
 	public function getAdresse1() {
@@ -40,7 +40,7 @@ class Etablissement  {
 	}
 
 	public function getAdresse3() {
-		return $this->Adresse3;
+		return $this->adresse3;
 	}
 
 	public function getCodePostal() {
@@ -61,8 +61,8 @@ class Etablissement  {
 		$this->code = $code;
 	}
 
-	public function setNom($nom) {
-		$this->nom = $nom;
+	public function setLibelle($libelle) {
+		$this->libelle = $libelle;
 	}
 
 	public function setAdresse1($adresse1) {
@@ -88,19 +88,19 @@ class Etablissement  {
 	//***********************************************************************************
 
 	public function ifExists() {
-		$reponse = $this->dataAccess->existsEtablissement($this);
+		$reponse = $this->dataAccess->existsEtablissements($this);
 		return $reponse;
 	}
 
-	public function setEtablissement() {	
-		$this->dataAccess->setEtablissement($this);
+	public function setEtablissements() {	
+		$this->dataAccess->setEtablissements($this);
 	}
 
-	public function getEtablissement() {
-		return $this->dataAccess->getEtablissement($this);
+	public function getEtablissements() {
+		return $this->dataAccess->getEtablissements($this);
 	}
 
-	public function deleteEtablissement() {
+	public function deleteEtablissements() {
 		$this->dataAccess->dataAccess($this, 'DELETE');
 	}
 

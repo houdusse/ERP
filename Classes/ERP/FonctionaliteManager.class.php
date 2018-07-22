@@ -20,7 +20,7 @@ class FonctionaliteManager extends DataManager {
 	// Teste l'existance d'un etablissement par recherche sur le libelle
 	public function existsFonctionalite(Fonctionalite $fonctionalite) {
 		$className = Utilitaires::className($fonctionalite);
-		$criteres = array(':libelle' => $fonctionalite->getLibelle();
+		$criteres = array(':libelle' => $fonctionalite->getLibelle());
 		$selection = $this->recupId(self::TABLE_SQL, $criteres, $className);
 		if (count($selection) == 1) {
 			return true;
@@ -29,10 +29,9 @@ class FonctionaliteManager extends DataManager {
 		}
 	}
 
-
 	// Retourne un tableau d'object etablissement avec 1 objet trouve par le libelle
 	public function getFonctionalite(Fonctionalite $fonctionalite) {
-		$criteres  = array(':libelle' => $fonctionalite->getLibelle();
+		$criteres  = array(':libelle' => $fonctionalite->getLibelle());
 		$className = Utilitaires::className($fonctionalite);
 		$tableau = $this->recupId(self::TABLE_SQL, $criteres, $className);
 		echo '----getIdUtilisateursGroups----';
@@ -48,8 +47,12 @@ class FonctionaliteManager extends DataManager {
 				$fonctionalite->setId($retour[0]->getId());
 			}
 		}
+		if ($operation == 'INSERT') {
+			$parametres = $this->buildParameters($fonctionalite, array('id'), null, null);
+		} else	{
+			$parametres = $this->buildParameters($fonctionalite, null, null, null);
+		}
 		$instruction = $operation;
-		$parametres = $this->construireParametres($fonctionalite);
 		$className = Utilitaires::className($fonctionalite);
 		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 	} 

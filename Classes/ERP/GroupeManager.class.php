@@ -41,43 +41,23 @@ class GroupeManager extends DataManager {
 		return $tableau;
 	}
 
-	// Supprime le Groupe de la base
-	public function deleteGroup(Groupe $group) {
-		$instruction = 'DELETE';
-		$parametres = array(':id' => $group->getId());
-		$className = Utilitaires::className($group);
-		$chaineSql = $this->buidRequest($instruction, $parametres, self::TABLE_SQL);
-		echo '---DELETE----';
-		var_dump($chaineSql);
 
-		// $this->ADO($chaineSql, $parametres, $className);
-	} 
-
-	// met a jours la base avec l'objet reçu en parametre
-	public function updateGroup(Groupe $group) {
-		if ($group->getId() === null) {
-			$retour = $this->getGroup($group);
-			$group->setId($retour[0]->getId());
+	public function dataAccess(Groupe $group, $operation) {
+		if ($operation == 'UPDATE') {
+			if ($group->getId() === null) {
+				$retour = $this->getGroupe($fonctionalite);
+				$fonctionalite->setId($retour[0]->getId());
+			}
 		}
-		$instruction = 'UPDATE';
-		$parametres = $this->construireParametres($group);
+		if ($operation == 'INSERT') {
+			$parametres = $this->buildParameters($group, array('id'), null, null);
+		} else	{
+			$parametres = $this->buildParameters($group, null, null, null);
+		}
+		$instruction = $operation;
 		$className = Utilitaires::className($group);
 		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
-		echo '---UPDATE----';
-		var_dump($chaineSql);
-		// $this->ADO($chaineSql, $parametres, $className);
-	}
-
-	// Insere l'objet reçu en parametre dans la base
-	public function writeGroup(Groupe $group) {
-		$instruction = 'INSERT';
-		$parametres = $this->construireParametres($group);
-		$className = Utilitaires::className($group);
-		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
-		echo '---INSERT----';
-		var_dump($chaineSql);
-
-	} 
+	}  
 }
 
 

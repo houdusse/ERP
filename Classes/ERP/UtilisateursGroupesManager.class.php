@@ -59,9 +59,14 @@ class UtilisateursGroupesManager extends DataManager {
 				$etablissement->setId($retour[0]->getId());
 			}
 		}
+		if ($operation == 'INSERT') {
+			$parametres = $this->buildParameters($user, array('id'), null, null);
+		} else	{
+			$parametres = $this->buildParameters($user, null, null, null);
+		}
 		$instruction = $operation;
-		$parametres = $this->construireParametres($etablissement);
-		$className = Utilitaires::className($etablissement);
+		$parametres = $this->construireParametres($link);
+		$className = Utilitaires::className($link);
 		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);
 	} 
 }

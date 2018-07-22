@@ -59,9 +59,9 @@ class ModuleManager extends DataManager {
 		$instruction = $operation;
 		echo '--Operation--';
 		if ($operation == 'INSERT') {
-			$parametres = $this->construireParametres($module, array('id'));
+			$parametres = $this->construireParametres($module, array('id'), null, null);
 		} else	{
-			$parametres = $this->construireParametres($module);
+			$parametres = $this->construireParametres($module, null, null, null);
 		}	
 		$className = Utilitaires::className($module);
 		$chaineSql = $this->buildRequest($instruction, $parametres, self::TABLE_SQL);

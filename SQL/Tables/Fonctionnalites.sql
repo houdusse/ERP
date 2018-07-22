@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Fonctionnalites (
 	FOREIGN KEY(idModule) REFERENCES Modules(id)
 )
 ;
-INSERT INTO Fonctionnalites (nom, idModule) VALUES
+INSERT INTO Fonctionnalites (libelle, idModule) VALUES
 ('commandes', 1),
 ('clients', 1),
 ('depots', 1),
